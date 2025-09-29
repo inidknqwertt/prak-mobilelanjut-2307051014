@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_screen.dart';
+import 'dashboard_screen.dart'; // <- tambahkan ini biar DashboardScreen dikenal
 
 class LoginScreen extends StatefulWidget {
   static const route = '/signin';
@@ -26,12 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Widget requiredLabel(String text) => Row(
           children: [
             Text(text, style: const TextStyle(fontSize: 13)),
-            const Text('*',
-                style: TextStyle(color: Colors.red, fontSize: 13)),
+            const Text(
+              '*',
+              style: TextStyle(color: Colors.red, fontSize: 13),
+            ),
           ],
         );
 
-    // tombol biru dengan gradient
+    // tombol biru dengan gradient (pakai parameter posisional)
     Widget primaryButton(String label, VoidCallback onTap) => GestureDetector(
           onTap: onTap,
           child: Container(
@@ -137,42 +140,55 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero),
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
                           onPressed: () {},
                           child: const Text(
-  'Forgot Password',
-  style: TextStyle(fontSize: 12),
-), // Text
-), // TextButton
-), // Align
-const SizedBox(height: 6),
+                            'Forgot Password',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
 
-primaryButton('Sign In Now', () {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Sign In tapped')),
-  );
-}),
-const SizedBox(height: 14),
+                      // pemanggilan primaryButton disesuaikan (posisional)
+                      primaryButton('Sign In Now', () {
+                        if (_email.text.isEmpty || _pass.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Email dan Password tidak boleh kosong!'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            DashboardScreen.route,
+                            (route) => false,
+                          );
+                        }
+                      }),
 
-Center(
-  child: TextButton(
-    onPressed: () =>
-        Navigator.pushNamed(context, SignupScreen.route),
-    child: const Text(
-      'Create New Account',
-      style: TextStyle(fontSize: 13),
-    ),
-  ),
-),
-], 
-),
-), 
-], 
-), 
-),
-), 
-)
-);
-} 
+                      const SizedBox(height: 14),
+
+                      Center(
+                        child: TextButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, SignupScreen.route),
+                          child: const Text(
+                            'Create New Account',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
