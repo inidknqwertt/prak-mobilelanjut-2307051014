@@ -179,9 +179,5 @@ Widget primaryButton(String label, VoidCallback onTap) => GestureDetector(
       ),
     );
   }
-
-  
-
-  
 }
 
